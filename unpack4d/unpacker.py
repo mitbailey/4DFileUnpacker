@@ -22,8 +22,8 @@ def _descend_obj(obj, sep='\t'):
             print (sep+'\t','-',key,':',obj.attrs[key])
 
 def unpack(path):
-    if not path.endswith('.4d'):
-        print('Error: file must be a .4d file')
+    if not path.endswith('.4D') or path.endswith('.4d'):
+        print('Error: file must be a .4D file')
         exit(1)
 
     surfaces = {}
