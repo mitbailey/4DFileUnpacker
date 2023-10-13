@@ -1,8 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Since we're within the directory we use the following:
 from unpack4d import unpacker as u4d
-# import unpack4d as u4d
+
+# Otherwise, if this repository is being used as a submodule, use the following:
+# from Unpack4D.unpack4d import unpacker as u4d
 
 if __name__ == '__main__':
     surfaces, metadata = u4d.unpack('example.4d')
