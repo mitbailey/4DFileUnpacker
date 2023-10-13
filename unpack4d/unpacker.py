@@ -31,11 +31,12 @@ def unpack(path):
 
     hfdata = h5.File(path, 'r')
 
-    surfaces['FringeAmplitude'] = data = hfdata['Measurement']['FringeAmplitude']['Data']
-    surfaces['Intensity'] = data = hfdata['Measurement']['Intensity']['Data']
-    surfaces['Modulation'] = data = hfdata['Measurement']['Modulation']['Data']
-    surfaces['SurfaceInWaves'] = data = hfdata['Measurement']['SurfaceInWaves']['Data']
-    surfaces['UnprocessedUnwrappedPhase'] = data = hfdata['Measurement']['UnprocessedUnwrappedPhase']['Data']
+    surfaces['FringeAmplitude'] = hfdata['Measurement']['FringeAmplitude']['Data']
+    surfaces['Intensity'] = hfdata['Measurement']['Intensity']['Data']
+    surfaces['Modulation'] = hfdata['Measurement']['Modulation']['Data']
+    surfaces['SurfaceInWaves'] = hfdata['Measurement']['SurfaceInWaves']['Data']
+    surfaces['SurfaceInNanometers'] = hfdata['Measurement']['SurfaceInWaves']['Data'] * hfdata['Measurement'].attrs['WavelengthInNanometers']
+    surfaces['UnprocessedUnwrappedPhase'] = hfdata['Measurement']['UnprocessedUnwrappedPhase']['Data']
 
     metadata['WavelengthInNanometers'] = hfdata['Measurement'].attrs['WavelengthInNanometers']
     metadata['ExposureTimeInMilliseconds'] = hfdata['Measurement']['GlobalSettings']['ACA2440'].attrs['ExposureTimeInMilliseconds']
