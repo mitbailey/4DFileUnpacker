@@ -43,5 +43,6 @@ def unpack(path):
     metadata['Timestamp'] = hfdata['Measurement']['Metadata'].attrs['Timestamp']
     metadata['MeasurementNumber'] = hfdata['Measurement']['Metadata'].attrs['MeasurementNumber']
     metadata['NumberOfAveragedMeasurements'] = hfdata['Measurement']['GlobalSettings']['BurstSettings'].attrs['NumberOfAveragedMeasurements']
+    metadata['PixelSizeInMicrons'] = hfdata['Measurement']['CalibratedFrames']['image_0'].attrs['PixelSizeInMicrons']
 
     return surfaces, metadata
