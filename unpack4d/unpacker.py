@@ -53,7 +53,7 @@ def compactify(path):
     print('Compacting:', path)
     surfaces, metadata = unpack(path)
     save_list = [{'SurfaceInNanometers': surfaces['SurfaceInNanometers']}, metadata]
-    pickle.dump(save_list, lzma.open('compacted/' + path[[i+1 for i,c in enumerate(path) if c=='/'][-2]:].replace('.', '-').replace('/', '-') + ".xz", "wb"))
+    pickle.dump(save_list, lzma.open('compacted/' + path[[i+1 for i,c in enumerate(path) if c=='/'][-2]:].replace('.', '-').replace('/', '-') + ".xz", "wb"), pickle.HIGHEST_PROTOCOL)
 
 def open_compactified(path):
     if not path.endswith('.xz'):
