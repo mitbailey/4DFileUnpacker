@@ -1,4 +1,7 @@
 import h5py as h5
+import pickle
+import hashlib
+import lzma
 
 def h5dump(path, group='/'):
     """
@@ -46,3 +49,20 @@ def unpack(path):
     metadata['PixelSizeInMicrons'] = hfdata['Measurement']['CalibratedFrames']['image_0'].attrs['PixelSizeInMicrons']
 
     return surfaces, metadata
+
+# def hash(path):
+    # with open(path, "rb") as f:
+        # digest = hashlib.md5(f.read())
+
+def compactify(path):
+    print('Compacting:', path)
+    surfaces, metadata = unpack(path)
+    save_list = [surfaces['SurfaceInNanometers'], metadata]
+    # pickle.dump(save_list, lzma.open('compacted/' + path[[i+1 for i,c in enumerate(path) if c=='/'][-2]:].replace('.', '-').replace('/', '-') + hashlib.md5(open(path, "rb").read()).hexdigest() + ".xz", "wb"))
+    pickle.dump(save_list, lzma.open('compacted/' + path[[i+1 for i,c in enumerate(path) if c=='/'][-2]:].replace('.', '-').replace('/', '-') + ".xz", "wb"))
+
+def open_compactified(path):
+    retlist = pickle.load(lzma.open(path, "rb"))
+    print(retlist[1])
+    return retlist[0], retlist[1]
+    
