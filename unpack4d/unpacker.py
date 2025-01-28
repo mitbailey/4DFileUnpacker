@@ -1,3 +1,4 @@
+#%%
 import h5py as h5
 import pickle
 import lzma
@@ -25,7 +26,7 @@ def _descend_obj(obj, sep='\t'):
 
 def unpack(path):
     if not path.endswith('.4D') or path.endswith('.4d'):
-        print('Error: file must be a .4D file')
+        print('Error: file must be a .4D file ({})'.format(path))
         exit(1)
 
     surfaces = {}
@@ -46,13 +47,30 @@ def unpack(path):
     metadata['MeasurementNumber'] = hfdata['Measurement']['Metadata'].attrs['MeasurementNumber']
     metadata['NumberOfAveragedMeasurements'] = hfdata['Measurement']['GlobalSettings']['BurstSettings'].attrs['NumberOfAveragedMeasurements']
     metadata['PixelSizeInMicrons'] = hfdata['Measurement']['CalibratedFrames']['image_0'].attrs['PixelSizeInMicrons']
+    try:
+        metadata['BurstTimestamp'] = hfdata['Measurement']['Metadata'].attrs['BurstTimestamp']
+    except:
+        metadata['BurstTimestamp'] = 'N/A'
 
     return surfaces, metadata
 
+
+def open(path):
+    if not path.endswith('.4D') or path.endswith('.4d'):
+        print('Error: file must be a .4D file ({})'.format(path))
+        return unpack(path)
+    
+    hfdata = h5.File(path, 'r')
+    # measurement = hfdata['Measurement']
+    # metadata = hfdata['Measurement']['Metadata']
+
+    return hfdata['Measurement']
+
 def compactify(path):
-    print('Compacting:', path)
+    print('Compacting from', path)
     surfaces, metadata = unpack(path)
     save_list = [{'SurfaceInNanometers': surfaces['SurfaceInNanometers']}, metadata]
+    print('to', 'compacted/' + path[[i+1 for i,c in enumerate(path) if c=='/'][-2]:].replace('.', '-').replace('/', '-') + ".xz")
     pickle.dump(save_list, lzma.open('compacted/' + path[[i+1 for i,c in enumerate(path) if c=='/'][-2]:].replace('.', '-').replace('/', '-') + ".xz", "wb"), pickle.HIGHEST_PROTOCOL)
 
 def open_compactified(path):
@@ -63,3 +81,4 @@ def open_compactified(path):
     retlist = pickle.load(lzma.open(path, "rb"))
     return retlist[0], retlist[1]
     
+# %%
